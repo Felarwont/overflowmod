@@ -3,6 +3,7 @@ import logging
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import IntegrityError
 
+from core.players.exceptions import PlayerNotFound
 from core.players.player import ServerPlayer
 from core.db.models import PlayerModel
 
@@ -41,12 +42,12 @@ class PlayerRepository:
             
             return serverplayer
     
-    def save(self, serverplayer: ServerPlayer) -> None: # Обновление данных игрока в базе данных
+    def save(self, serverplayer: ServerPlayer) -> None:
         with self.session_factory() as session:
             db_player = session.get(PlayerModel, serverplayer.get_account_id())
             if not db_player:
-                return
-            
+                raise PlayerNotFound("Player not found in database")
+
             db_player.account_name = serverplayer.account_name
             db_player.kills = serverplayer.kills
             db_player.deaths = serverplayer.deaths
@@ -60,7 +61,7 @@ class PlayerRepository:
             for account_id, serverplayer in serverplayers.items():
                 db_player = session.get(PlayerModel, account_id)
                 if not db_player:
-                    return
+                    raise PlayerNotFound("Player not found in database")
                 
                 db_player.account_name = serverplayer.account_name
                 db_player.kills = serverplayer.kills
