@@ -44,3 +44,9 @@ class PlayerService:
     
     def remove_from_cache(self, serverplayer: ServerPlayer) -> None:
         self.manager.remove(serverplayer)
+    
+    def save_in_db(self, serverplayer: ServerPlayer) -> None:
+        self.repository.save(serverplayer)
+    
+    def save_all_in_db(self) -> None:
+        self.repository.save_all(self.manager.all())
