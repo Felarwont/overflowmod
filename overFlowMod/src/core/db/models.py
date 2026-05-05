@@ -7,5 +7,6 @@ class PlayerModel(Base):
 
     account_id: Mapped[str] = mapped_column(String, primary_key=True)
     account_name: Mapped[str] = mapped_column(String)
+    score: Mapped[int] = mapped_column(Integer, default=0)
     kills: Mapped[int] = mapped_column(Integer, default=0)
     deaths: Mapped[int] = mapped_column(Integer, default=0)

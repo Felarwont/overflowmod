@@ -22,6 +22,7 @@ class PlayerRepository:
             return ServerPlayer(
                 account_id=db_player.account_id,
                 account_name=db_player.account_name,
+                score=db_player.score,
                 kills=db_player.kills,
                 deaths=db_player.deaths
             )
@@ -49,6 +50,7 @@ class PlayerRepository:
                 raise PlayerNotFound("Player not found in database")
 
             db_player.account_name = serverplayer.account_name
+            db_player.score = serverplayer.score
             db_player.kills = serverplayer.kills
             db_player.deaths = serverplayer.deaths
 
@@ -64,6 +66,7 @@ class PlayerRepository:
                     raise PlayerNotFound("Player not found in database")
                 
                 db_player.account_name = serverplayer.account_name
+                db_player.score = serverplayer.score
                 db_player.kills = serverplayer.kills
                 db_player.deaths = serverplayer.deaths
 
