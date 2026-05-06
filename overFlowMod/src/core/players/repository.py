@@ -33,7 +33,6 @@ class PlayerRepository:
                 account_id=serverplayer.get_account_id(),
                 account_name=serverplayer.account_name
             )
-
             try:
                 session.add(player)
                 session.commit()
@@ -44,6 +43,8 @@ class PlayerRepository:
             return serverplayer
     
     def save(self, serverplayer: ServerPlayer) -> None:
+        if not serverplayer._dirty:
+            return
         with self.session_factory() as session:
             db_player = session.get(PlayerModel, serverplayer.get_account_id())
             if not db_player:
@@ -56,11 +57,16 @@ class PlayerRepository:
 
             session.commit()
 
+            serverplayer._dirty = False
+
             logger.info("SAVE player data in database")
     
     def save_all(self, serverplayers: dict[str, ServerPlayer]) -> None:
         with self.session_factory() as session:
             for account_id, serverplayer in serverplayers.items():
+                if not serverplayer._dirty:
+                    continue
+
                 db_player = session.get(PlayerModel, account_id)
                 if not db_player:
                     raise PlayerNotFound("Player not found in database")
@@ -71,3 +77,5 @@ class PlayerRepository:
                 db_player.deaths = serverplayer.deaths
 
                 session.commit()
+
+                serverplayer._dirty = False

@@ -3,7 +3,7 @@ import logging
 from bascenev1 import GameActivity
 from bascenev1 import PlayerDiedMessage
 
-from game.systems.events.hook import on_player_death
+from game.systems.events.hooks import on_player_death
 
 logger = logging.getLogger(f"overflowmod.{__name__}")
 

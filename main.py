@@ -8,7 +8,7 @@ def main(self):
 
     from game.systems.events.engine import EventSystem
     from core.db.connection import engine, Base
-    from game.systems.events import hook
+    from game.systems.events import hooks
     from core.app import player_service
     from game import patches
 
@@ -19,8 +19,8 @@ def main(self):
 
     event_system = EventSystem(
         player_service=player_service,
-        on_connect=hook.on_player_connect,
-        on_disconnect=hook.on_player_disconnect
+        on_connect=hooks.on_player_connect,
+        on_disconnect=hooks.on_player_disconnect
     )
     self.timer = babase.AppTimer(0.5, event_system.update, True)
 
