@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from bascenev1 import get_game_roster
 
-@dataclass
+@dataclass(frozen=True)
 class PlayerSpec:
     account_id: str
     account_name: str

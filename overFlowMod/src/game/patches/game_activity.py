@@ -3,7 +3,8 @@ import logging
 from bascenev1 import GameActivity
 from bascenev1 import PlayerDiedMessage
 
-from game.systems.events.hooks import on_player_death
+from core.events.types import PlayerDiedEvent
+from core.app import events, player_service
 
 logger = logging.getLogger(f"overflowmod.{__name__}")
 
@@ -16,7 +17,12 @@ def new_handlemessage(self, msg):
         player = msg.getplayer(self.playertype)
         killer = msg.getkillerplayer(self.playertype)
 
-        on_player_death(player=player, killer=killer)
+        serverplayer = player_service.get(player.sessionplayer.get_account_id())
+        serverkiller = None
+        if killer and killer is not player:
+            serverkiller = player_service.get(killer.sessionplayer.get_account_id())
+
+        events.emit(PlayerDiedEvent(player=serverplayer, killer=serverkiller))
 
         self.stats.player_was_killed(
             player, killed=msg.killed, killer=killer
